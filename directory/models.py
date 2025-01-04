@@ -25,7 +25,10 @@ class Employee(models.Model):
 
 class Department(models.Model):
     name = models.CharField(max_length=255)
-    employees_count = models.PositiveSmallIntegerField(default=0)
+
+    @property
+    def employees_count(self):
+        return self.employees.count()
 
     class Meta:
         ordering = ['name']
