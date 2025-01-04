@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MinValueValidator
 
 class Employee(models.Model):
     GENDER_MALE = 'M'
@@ -13,8 +14,8 @@ class Employee(models.Model):
     address = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=20, unique=True)
     email = models.EmailField(unique=True)
-    department = models.ForeignKey('Department', on_delete=models.CASCADE)
-    salary = models.PositiveIntegerField()
+    department = models.ForeignKey('Department', on_delete=models.CASCADE, related_name='employees')
+    salary = models.PositiveIntegerField(validators=[MinValueValidator(3000)])
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
