@@ -14,7 +14,7 @@ class Employee(models.Model):
     address = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=20, unique=True)
     email = models.EmailField(unique=True)
-    department = models.ForeignKey('Department', on_delete=models.CASCADE, related_name='employees')
+    department = models.ForeignKey('Department', on_delete=models.CASCADE, related_name='employees', null=True)
     salary = models.PositiveIntegerField(validators=[MinValueValidator(3000)])
 
     def __str__(self):
@@ -25,10 +25,6 @@ class Employee(models.Model):
 
 class Department(models.Model):
     name = models.CharField(max_length=255)
-
-    @property
-    def employees_count(self):
-        return self.employees.count()
 
     class Meta:
         ordering = ['name']
