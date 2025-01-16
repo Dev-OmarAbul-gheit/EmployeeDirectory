@@ -10,7 +10,8 @@ class EmployeeSerializer(serializers.ModelSerializer):
 
 class DepartmentSerializer(serializers.ModelSerializer):
     employees = serializers.HyperlinkedIdentityField(
-        view_name = 'department-employee-list'
+        view_name = 'department-employee-list',
+        read_only=True
     )
     class Meta:
         model = Department
