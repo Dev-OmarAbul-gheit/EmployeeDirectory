@@ -76,12 +76,39 @@ The following API endpoints are available:
 - **Response**: 
     - `200 OK`: Returns an array of employee objects.
 
+##### POST /directory/employees
+- **Description**: Creates a new employee.
+- **Request Body**:
+    - json object of employee data
+- **Response**: 
+    - `201 Created`: Returns the created employee object.
+    - `400 Bad Request`: If the request body is invalid.
+
 ##### GET /directory/employees/{pk}
 - **Description**: Retrieves a specific employee by its pk.
 - **Path Parameters**:
-    - `pk` (string): The primary key field of an employee.
+    - `pk` (int): The primary key field of an employee.
 - **Response**: 
     - `200 OK`: Returns the employee object.
+    - `404 Not Found`: If the employee with the specified pk does not exist.
+
+##### PUT /directory/employee/{pk}
+- **Description**: Updates an existing employee by its pk.
+- **Path Parameters**:
+    - `pk` (int): The unique identifier of the employee.
+- **Request Body**:
+    - json object of employee data
+- **Response**: 
+    - `200 OK`: Returns the updated employee object.
+    - `400 Bad Request`: If the request body is invalid.
+    - `404 Not Found`: If the resource with the specified ID does not exist.
+
+##### DELETE /directory/employee/{pk}
+- **Description**: Deletes a specific employee by its pk.
+- **Path Parameters**:
+    - `pk` (int): The unique identifier of the employee.
+- **Response**: 
+    - `204 No Content`: If the employee was successfully deleted.
     - `404 Not Found`: If the employee with the specified pk does not exist.
 
 
@@ -95,7 +122,7 @@ The following API endpoints are available:
 ##### GET /directory/departments/{pk}
 - **Description**: Retrieves a specific department by its pk.
 - **Path Parameters**:
-    - `pk` (string): The primary key field of a department.
+    - `pk` (int): The primary key field of a department.
 - **Response**: 
     - `200 OK`: Returns the department object.
     - `404 Not Found`: If the department with the specified pk does not exist.
@@ -103,15 +130,15 @@ The following API endpoints are available:
 ##### GET /directory/departments/{pk}/employees
 - **Description**: Retrieves a list of all employees at a specific department in the company by the department pk.
 - **Path Parameters**:
-    - `pk` (string): The primary key field of a department.
+    - `pk` (int): The primary key field of a department.
 - **Response**: 
     - `200 OK`: Returns an array of employee objects.
 
 ##### GET /directory/departments/{pk}/employees/{emp_pk}
 - **Description**: Retrieves a specific employee at a specific department in the company by the department pk and the employee pk.
 - **Path Parameters**:
-    - `pk` (string): The primary key field of a department.
-    - `emp_pk` (string): The primary key field of an employee.
+    - `pk` (int): The primary key field of a department.
+    - `emp_pk` (int): The primary key field of an employee.
 - **Response**: 
     - `200 OK`: Returns the employee object.
     - `404 Not Found`: If the employee with the specified emp_pk does not exist in the department with the specified pk.

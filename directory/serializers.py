@@ -3,7 +3,6 @@ from .models import Employee, Department
 
 
 class EmployeeSerializer(serializers.ModelSerializer):
-    department = serializers.StringRelatedField()
     class Meta:
         model = Employee
         fields = ['id', 'first_name', 'last_name', 'gender', 'address', 'phone_number', 'email', 'department', 'salary']
