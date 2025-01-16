@@ -4,16 +4,24 @@ A Django-based project that provides RESTful APIs to manage employees and depart
 
 This application is designed to handle CRUD operations efficiently and ensure robust management of organizational data.
 
-### Features
-- Manage Employees: Create, read, update, and delete employee records.
-- Manage Departments: Handle departmental information and assignments.
-- User Authentication: Includes support for admin users via Django's built-in authentication system.
-- Scalable and Modular: Built using Django REST Framework for extensibility and maintainability.
+
+### Use Cases:
+
+- Organize employee records in small to medium-sized companies.
+- Manage departmental data and associations.
+- Simplify backend integration for HR management systems.
+
+
+### Tech Stack
+- Backend: Django, Django REST Framework
+- Database: SQLite (default, can be replaced)
+- Environment Management: Virtualenv
 
 ### Requirements
-- Python 3.x
-- pip
-- virtualenv
+- Python 3.8+
+- pip 20.0+
+- virtualenv 16.0+
+- SQLite (default) or PostgreSQL/MySQL for production
 
 
 ### Setup Instructions
