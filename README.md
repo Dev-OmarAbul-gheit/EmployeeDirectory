@@ -62,15 +62,48 @@ python manage.py runserver
 The following API endpoints are available:
 
 #### Employees
-- GET /api/employees/ - List all employees
-- POST /api/employees/ - Create a new employee
-- GET /api/employees/<id>/ - Retrieve a specific employee
-- PUT /api/employees/<id>/ - Update an employee
-- DELETE /api/employees/<id>/ - Delete an employee
+
+##### GET /directory/employees
+- **Description**: Retrieves a list of all employees in the company.
+- **Response**: 
+    - `200 OK`: Returns an array of employee objects.
+
+##### GET /directory/employees/{pk}
+- **Description**: Retrieves a specific employee by its pk.
+- **Path Parameters**:
+    - `pk` (string): The primary key field of an employee.
+- **Response**: 
+    - `200 OK`: Returns the employee object.
+    - `404 Not Found`: If the employee with the specified pk does not exist.
+
 
 #### Departments
-- GET /api/departments/ - List all departments
-- POST /api/departments/ - Create a new department
-- GET /api/departments/<id>/ - Retrieve a specific department
-- PUT /api/departments/<id>/ - Update a department
-- DELETE /api/departments/<id>/ - Delete a department
+
+##### GET /directory/departments
+- **Description**: Retrieves a list of all departments in the company.
+- **Response**: 
+    - `200 OK`: Returns an array of department objects.
+
+##### GET /directory/departments/{pk}
+- **Description**: Retrieves a specific department by its pk.
+- **Path Parameters**:
+    - `pk` (string): The primary key field of a department.
+- **Response**: 
+    - `200 OK`: Returns the department object.
+    - `404 Not Found`: If the department with the specified pk does not exist.
+
+##### GET /directory/departments/{pk}/employees
+- **Description**: Retrieves a list of all employees at a specific department in the company by the department pk.
+- **Path Parameters**:
+    - `pk` (string): The primary key field of a department.
+- **Response**: 
+    - `200 OK`: Returns an array of employee objects.
+
+##### GET /directory/departments/{pk}/employees/{emp_pk}
+- **Description**: Retrieves a specific employee at a specific department in the company by the department pk and the employee pk.
+- **Path Parameters**:
+    - `pk` (string): The primary key field of a department.
+    - `emp_pk` (string): The primary key field of an employee.
+- **Response**: 
+    - `200 OK`: Returns the employee object.
+    - `404 Not Found`: If the employee with the specified emp_pk does not exist in the department with the specified pk.
