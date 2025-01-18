@@ -1,74 +1,45 @@
 from django.shortcuts import get_object_or_404
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.views import APIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from .models import Employee, Department
 from .serializers import EmployeeSerializer, DepartmentSerializer
 
 
-class EmployeeList(APIView):
-    def get(self, request, pk=None):
-        queryset = Employee.objects.all()
-        if pk:
-            queryset = queryset.filter(department_id = pk)
-        serializer = EmployeeSerializer(queryset, many=True)
-        return Response(serializer.data)
-    def post(self, request, pk=None):
+class EmployeeList(ListCreateAPIView):
+    serializer_class = EmployeeSerializer
+    def get_queryset(self):
+        department_id = self.request.parser_context['kwargs'].get('pk')
+        if department_id:
+            return Employee.objects.filter(department_id=department_id)
+        return Employee.objects.all()
+
+    def get_serializer_context(self):
         context = {}
-        if pk:
-            context = {'department_id' : pk}
-        serializer = EmployeeSerializer(data=request.data, context =context)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        department_id = self.request.parser_context['kwargs'].get('pk')
+        if department_id:
+            context = {'department_id' : department_id}
+        return context
 
-class EmployeeDetail(APIView):
-    def get(self, request, pk=None, emp_pk=None):
-        employee = get_object_or_404(Employee, pk=emp_pk, department_id = pk)
-        serializer = EmployeeSerializer(employee)
-        return Response(serializer.data)
+class EmployeeDetail(RetrieveUpdateDestroyAPIView):
+    serializer_class = EmployeeSerializer
     
-    def patch(self,request, pk=None, emp_pk=None):
-        employee = get_object_or_404(Employee, pk=emp_pk, department_id = pk)
-        serializer = EmployeeSerializer(employee, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
-    
-    def delete(self, request, pk=None, emp_pk=None):
-        employee = get_object_or_404(Employee, pk=emp_pk, department_id = pk)
-        employee.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    def get_object(self):
+        pk1 = self.request.parser_context['kwargs'].get('pk')
+        pk2 = self.request.parser_context['kwargs'].get('emp_pk')
+        if pk2:
+            return get_object_or_404(Employee, pk=pk2, department_id=pk1)
+        else:
+            return get_object_or_404(Employee, pk=pk1)
 
 
-class DepartmentList(APIView):
-    def get(self, request):
-        queryset = Department.objects.all()
-        serializer = DepartmentSerializer(queryset, many=True, context = {'request': request})
-        return Response(serializer.data)
-    
-    def post(self, request):
-        serializer = DepartmentSerializer(data=request.data, context = {'request':request})
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+class DepartmentList(ListCreateAPIView):
+    queryset = Department.objects.prefetch_related('employees').all()
+    serializer_class = DepartmentSerializer
+    def get_serializer_context(self):
+        return {'request': self.request}
 
 
-class DepartmentDetail(APIView):
-    def get(self, request, pk):
-        department = get_object_or_404(Department, pk=pk)
-        serializer = DepartmentSerializer(department, context = {'request': request})
-        return Response(serializer.data)
-
-    def patch(self, request, pk):
-        department = get_object_or_404(Department, pk=pk)
-        serializer = DepartmentSerializer(department, data=request.data, context = {'request': request})
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
-
-    def delete(self, request, pk):
-        department = get_object_or_404(Department, pk=pk)
-        department.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+class DepartmentDetail(RetrieveUpdateDestroyAPIView):
+    queryset = Department.objects.prefetch_related('employees').all()
+    serializer_class = DepartmentSerializer
+    def get_serializer_context(self):
+        return {'request': self.request}

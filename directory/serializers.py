@@ -22,7 +22,7 @@ class DepartmentSerializer(serializers.ModelSerializer):
         view_name = 'department-employee-list',
         read_only=True
     )
-    employees_count = serializers.SerializerMethodField(read_only = True)
+    employees_count = serializers.SerializerMethodField()
     class Meta:
         model = Department
         fields = ['id', 'name', 'employees', 'employees_count']
