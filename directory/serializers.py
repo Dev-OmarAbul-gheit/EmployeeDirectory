@@ -7,12 +7,25 @@ class EmployeeSerializer(serializers.ModelSerializer):
         model = Employee
         fields = ['id', 'first_name', 'last_name', 'gender', 'address', 'phone_number', 'email', 'department', 'salary']
 
+    
+    def create(self, validated_data):
+        department_id = self.context.get('department_id')
+        if department_id:
+            validated_data['department_id'] = department_id
+        
+        employee = Employee.objects.create(**validated_data)
+        return employee
+
 
 class DepartmentSerializer(serializers.ModelSerializer):
     employees = serializers.HyperlinkedIdentityField(
         view_name = 'department-employee-list',
         read_only=True
     )
+    employees_count = serializers.SerializerMethodField(read_only = True)
     class Meta:
         model = Department
-        fields = ['id', 'name', 'employees']
+        fields = ['id', 'name', 'employees', 'employees_count']
+
+    def get_employees_count(self, department):
+        return department.employees.count()
