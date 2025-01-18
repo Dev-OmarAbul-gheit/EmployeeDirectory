@@ -4,13 +4,14 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .models import Employee, Department
 from .serializers import EmployeeSerializer, DepartmentSerializer
 from .filters import EmployeeFilter
-
+from .paginations import DefaultPagination
 
 class EmployeeViewSet(ModelViewSet):
     serializer_class = EmployeeSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_class = EmployeeFilter
     search_fields = ['first_name', 'last_name', 'phone_number', 'email', 'address']
+    pagination_class = DefaultPagination
     def get_queryset(self):
         department_pk = self.kwargs.get('department_pk')
         if department_pk:
