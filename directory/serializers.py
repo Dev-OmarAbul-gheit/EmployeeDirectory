@@ -7,7 +7,6 @@ class EmployeeSerializer(serializers.ModelSerializer):
         model = Employee
         fields = ['id', 'first_name', 'last_name', 'gender', 'address', 'phone_number', 'email', 'department', 'salary']
 
-    
     def create(self, validated_data):
         department_id = self.context.get('department_id')
         if department_id:
@@ -19,8 +18,8 @@ class EmployeeSerializer(serializers.ModelSerializer):
 
 class DepartmentSerializer(serializers.ModelSerializer):
     employees = serializers.HyperlinkedIdentityField(
-        view_name = 'department-employee-list',
-        read_only=True
+        view_name='department-employee-list',
+        lookup_url_kwarg='department_pk',
     )
     employees_count = serializers.SerializerMethodField()
     class Meta:

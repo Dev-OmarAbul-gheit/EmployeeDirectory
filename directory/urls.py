@@ -1,11 +1,16 @@
-from django.urls import path
+from django.urls import include, path
+from rest_framework.routers import DefaultRouter
+from rest_framework_nested.routers import DefaultRouter, NestedDefaultRouter
 from . import views
 
+router = DefaultRouter()
+router.register('employees', viewset=views.EmployeeViewSet, basename='employee')
+router.register('departments', viewset= views.DepartmentViewSet, basename='department')
+
+departments_router = NestedDefaultRouter(router, 'departments', lookup='department')
+departments_router.register('employees', viewset=views.EmployeeViewSet, basename='department-employee')
+
 urlpatterns = [
-    path('employees/', view=views.EmployeeList.as_view(), name='employee-list'),
-    path('employees/<int:pk>/', view=views.EmployeeDetail.as_view(), name='employee-detail'),
-    path('departments/', view=views.DepartmentList.as_view(), name='department-list'),
-    path('departments/<int:pk>/', view=views.DepartmentDetail.as_view(), name='department-detail'),
-    path('departments/<int:pk>/employees/', view=views.EmployeeList.as_view(), name='department-employee-list'),
-    path('departments/<int:pk>/employees/<int:emp_pk>/', view=views.EmployeeDetail.as_view(), name='department-employee-detail')
+    path('', include(router.urls)),
+    path('', include(departments_router.urls)),
 ]
